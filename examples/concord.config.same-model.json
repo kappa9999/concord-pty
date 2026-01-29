@@ -1,0 +1,22 @@
+{
+  "session": {
+    "maxRounds": 8,
+    "timeoutMs": 120000,
+    "idleMs": 1500
+  },
+  "tui": {
+    "enabled": true
+  },
+  "agents": {
+    "alpha": {
+      "name": "Designer",
+      "role": "Designer",
+      "command": "your-cli --model your-model --interactive"
+    },
+    "beta": {
+      "name": "Reviewer",
+      "role": "Reviewer/Critic",
+      "command": "your-cli --model your-model --interactive"
+    }
+  }
+}
