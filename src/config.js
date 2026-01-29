@@ -3,7 +3,7 @@ const path = require('path');
 
 function resolveConfigPath(inputPath) {
   if (inputPath) return path.resolve(process.cwd(), inputPath);
-  const defaultPath = path.resolve(process.cwd(), 'concord.config.json');
+  const defaultPath = path.resolve(process.cwd(), 'criticloop.config.json');
   if (fs.existsSync(defaultPath)) return defaultPath;
   return null;
 }
@@ -11,7 +11,7 @@ function resolveConfigPath(inputPath) {
 function loadConfig(inputPath) {
   const resolved = resolveConfigPath(inputPath);
   if (!resolved || !fs.existsSync(resolved)) {
-    throw new Error('Config not found. Run: node ./bin/concord-pty.js init or node ./bin/concord-pty.js setup');
+    throw new Error('Config not found. Run: node ./bin/criticloop.js init or node ./bin/criticloop.js setup');
   }
   const raw = fs.readFileSync(resolved, 'utf8');
   const cfg = JSON.parse(raw);
@@ -55,3 +55,4 @@ module.exports = {
   loadConfig,
   applyOverrides
 };
+

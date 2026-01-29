@@ -11,21 +11,21 @@ npm install
 ## 2) Setup wizard (no manual edits)
 
 ```bash
-node ./bin/concord-pty.js setup
+node ./bin/criticloop.js setup
 ```
 
-This writes `concord.config.json` if you choose to save, or runs from in-memory settings.
+This writes `criticloop.config.json` if you choose to save, or runs from in-memory settings.
 
 ## 3) Run a task
 
 ```bash
-node ./bin/concord-pty.js --task "Design a minimal API and test plan"
+node ./bin/criticloop.js --task "Design a minimal API and test plan"
 ```
 
 ## 4) Interactive roles (no config edits)
 
 ```bash
-node ./bin/concord-pty.js --interactive --task "Create a UI spec and review it"
+node ./bin/criticloop.js --interactive --task "Create a UI spec and review it"
 ```
 
 ## 5) Using the same model twice
@@ -33,11 +33,11 @@ node ./bin/concord-pty.js --interactive --task "Create a UI spec and review it"
 Copy the template and edit the command to your CLI:
 
 ```bash
-copy examples\concord.config.same-model.json concord.config.json
+copy examples\criticloop.config.same-model.json criticloop.config.json
 ```
 
 ```bash
-node ./bin/concord-pty.js --task "Create a UI spec and review it"
+node ./bin/criticloop.js --task "Create a UI spec and review it"
 ```
 
 ## 6) Using two different CLIs
@@ -45,11 +45,11 @@ node ./bin/concord-pty.js --task "Create a UI spec and review it"
 Copy the template and edit both commands:
 
 ```bash
-copy examples\concord.config.two-clis.json concord.config.json
+copy examples\criticloop.config.two-clis.json criticloop.config.json
 ```
 
 ```bash
-node ./bin/concord-pty.js --task "Draft a plan and critique it"
+node ./bin/criticloop.js --task "Draft a plan and critique it"
 ```
 
 ## 7) Logs
@@ -70,4 +70,6 @@ Get-Content -Wait sessions\<timestamp>\agentA.log
 - If responses cut off, increase `timeoutMs` or `idleMs` in config.
 - If a CLI prints extra banners, the sentinel helps detect message boundaries.
 - For common issues, see `docs/TROUBLESHOOTING.md`.
+
+
 

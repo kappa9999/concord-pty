@@ -7,7 +7,7 @@ const Tui = require('./tui');
 const { loadConfig, applyOverrides } = require('./config');
 
 function resolveConfigPath(inputPath) {
-  return path.resolve(process.cwd(), inputPath || 'concord.config.json');
+  return path.resolve(process.cwd(), inputPath || 'criticloop.config.json');
 }
 
 function configExists(inputPath) {
@@ -37,7 +37,7 @@ async function promptTask() {
 
 async function getTask(opts) {
   if (opts.task) return opts.task;
-  if (process.env.CONCORD_TASK) return process.env.CONCORD_TASK.trim();
+  if (process.env.CRITICLOOP_TASK) return process.env.CRITICLOOP_TASK.trim();
   if (opts.taskFile) return fs.readFileSync(path.resolve(process.cwd(), opts.taskFile), 'utf8').trim();
   if (!process.stdin.isTTY) return await readAllStdin();
   return await promptTask();
@@ -46,12 +46,12 @@ async function getTask(opts) {
 function initConfig() {
   const target = resolveConfigPath();
   if (fs.existsSync(target)) {
-    console.error('concord.config.json already exists');
+    console.error('criticloop.config.json already exists');
     process.exit(1);
   }
-  const source = path.resolve(__dirname, '..', 'examples', 'concord.config.json');
+  const source = path.resolve(__dirname, '..', 'examples', 'criticloop.config.json');
   fs.copyFileSync(source, target);
-  console.log('Wrote concord.config.json');
+  console.log('Wrote criticloop.config.json');
 }
 
 function createPrompt() {
@@ -204,13 +204,13 @@ function applyAgentOverrides(config, overrides) {
 function collectOverrides(opts) {
   const env = process.env;
   const overrides = {
-    nameA: env.CONCORD_AGENT_A_NAME,
-    nameB: env.CONCORD_AGENT_B_NAME,
-    roleA: env.CONCORD_AGENT_A_ROLE,
-    roleB: env.CONCORD_AGENT_B_ROLE,
-    commandA: env.CONCORD_AGENT_A_COMMAND,
-    commandB: env.CONCORD_AGENT_B_COMMAND,
-    sessionName: env.CONCORD_SESSION_NAME
+    nameA: env.CRITICLOOP_AGENT_A_NAME,
+    nameB: env.CRITICLOOP_AGENT_B_NAME,
+    roleA: env.CRITICLOOP_AGENT_A_ROLE,
+    roleB: env.CRITICLOOP_AGENT_B_ROLE,
+    commandA: env.CRITICLOOP_AGENT_A_COMMAND,
+    commandB: env.CRITICLOOP_AGENT_B_COMMAND,
+    sessionName: env.CRITICLOOP_SESSION_NAME
   };
 
   if (opts.name) {
@@ -326,9 +326,9 @@ async function promptInteractiveOverrides(config) {
 async function main(argv) {
   const program = new Command();
   program
-    .name('concord-pty')
+    .name('criticloop')
     .description('PTY-based two-agent orchestrator for CLI models')
-    .option('-c, --config <path>', 'Config path (default: concord.config.json)')
+    .option('-c, --config <path>', 'Config path (default: criticloop.config.json)')
     .option('-t, --task <text>', 'Task text')
     .option('--task-file <path>', 'Read task from file')
     .option('--no-tui', 'Disable split TUI')
@@ -388,7 +388,7 @@ async function main(argv) {
   }
 
   if (!config) {
-    console.error('Config not found. Run: node ./bin/concord-pty.js init or node ./bin/concord-pty.js setup');
+    console.error('Config not found. Run: node ./bin/criticloop.js init or node ./bin/criticloop.js setup');
     process.exit(1);
   }
 
@@ -436,3 +436,4 @@ if (require.main === module) {
     process.exit(1);
   });
 }
+

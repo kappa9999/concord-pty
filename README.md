@@ -1,7 +1,7 @@
-# Concord-PTY
+# CriticLoop
 
 <p align="center">
-  <img src="assets/logo.svg" width="160" alt="Concord-PTY logo" />
+  <img src="assets/logo.svg" width="160" alt="CriticLoop logo" />
 </p>
 
 <p align="center">
@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/kappa9999/concord-pty">GitHub</a> |
+  <a href="https://github.com/kappa9999/criticloop">GitHub</a> |
   <a href="docs/GETTING_STARTED.md">Getting Started</a> |
   <a href="docs/TROUBLESHOOTING.md">Troubleshooting</a>
 </p>
@@ -22,7 +22,7 @@
 </p>
 
 ## What it does
-Concord-PTY runs two CLI agents in separate PTYs, assigns them roles, and loops their feedback until both agree on a shared proposal.
+CriticLoop runs two CLI agents in separate PTYs, assigns them roles, and loops their feedback until both agree on a shared proposal.
 
 Perfect for:
 - Designer vs Reviewer (same model, different roles)
@@ -44,7 +44,7 @@ Perfect for:
 +-----------------------------------------------------------+
 ```
 
-## Why Concord-PTY
+## Why CriticLoop
 - Model-agnostic: Works with any CLI model, including open-source tools.
 - Role-driven: Enforce Designer vs Critic behavior with a strict protocol.
 - Deterministic stopping: Sentinel + idle detection keeps outputs clean.
@@ -57,25 +57,25 @@ npm install
 
 ## Start fast (no manual edits)
 ```bash
-node ./bin/concord-pty.js setup
+node ./bin/criticloop.js setup
 ```
 
 Then run a task:
 
 ```bash
-node ./bin/concord-pty.js --task "Design a minimal API and test plan"
+node ./bin/criticloop.js --task "Design a minimal API and test plan"
 ```
 
 ## No-edit interactive mode
 Use `--interactive` to input roles (and optionally names/commands) at runtime:
 
 ```bash
-node ./bin/concord-pty.js --interactive --task "Draft a plan and review it"
+node ./bin/criticloop.js --interactive --task "Draft a plan and review it"
 ```
 
 ## Templates
-- Same model, different roles: `examples/concord.config.same-model.json`
-- Two different CLIs: `examples/concord.config.two-clis.json`
+- Same model, different roles: `examples/criticloop.config.same-model.json`
+- Two different CLIs: `examples/criticloop.config.two-clis.json`
 
 ## How it works
 ```mermaid
@@ -92,14 +92,14 @@ sequenceDiagram
 
 ## CLI usage
 ```bash
-node ./bin/concord-pty.js [options]
+node ./bin/criticloop.js [options]
 
 Commands:
   init    Write a template config
   setup   Interactive wizard (recommended)
 
 Options:
-  -c, --config <path>     Config path (default: concord.config.json)
+  -c, --config <path>     Config path (default: criticloop.config.json)
   -t, --task <text>       Task text
   --task-file <path>      Read task from file
   --no-tui                Disable split TUI
@@ -127,14 +127,14 @@ Options:
 ```
 
 ## Environment variables
-- `CONCORD_TASK`
-- `CONCORD_AGENT_A_NAME`, `CONCORD_AGENT_B_NAME`
-- `CONCORD_AGENT_A_ROLE`, `CONCORD_AGENT_B_ROLE`
-- `CONCORD_AGENT_A_COMMAND`, `CONCORD_AGENT_B_COMMAND`
-- `CONCORD_SESSION_NAME`
+- `CRITICLOOP_TASK`
+- `CRITICLOOP_AGENT_A_NAME`, `CRITICLOOP_AGENT_B_NAME`
+- `CRITICLOOP_AGENT_A_ROLE`, `CRITICLOOP_AGENT_B_ROLE`
+- `CRITICLOOP_AGENT_A_COMMAND`, `CRITICLOOP_AGENT_B_COMMAND`
+- `CRITICLOOP_SESSION_NAME`
 
 ## Config
-The `init` command writes `concord.config.json`. Example:
+The `init` command writes `criticloop.config.json`. Example:
 
 ```json
 {
@@ -164,14 +164,14 @@ The `init` command writes `concord.config.json`. Example:
 You can also use `cmd` + `args` instead of `command` if you prefer exact argument splitting.
 
 ## Protocol
-Concord-PTY sends a short bootstrap message that tells each agent to:
+CriticLoop sends a short bootstrap message that tells each agent to:
 - Always answer with:
   - `AGREE: yes|no`
   - `PROPOSAL:` (the plan)
   - optional `NOTES:`
 - End every response with the sentinel shown in the prompt
 
-If a model fails to print the sentinel, Concord-PTY can fall back to idle detection.
+If a model fails to print the sentinel, CriticLoop can fall back to idle detection.
 
 ## Logs
 Each session writes to `sessions/<timestamp>/`:
@@ -197,4 +197,6 @@ Get-Content -Wait sessions/<timestamp>/agentB.log
 ## Notes
 - Some CLIs display prompts or extra text; the sentinel helps delimit responses.
 - If you see premature cutoffs, increase `timeoutMs` or `idleMs` in config.
+
+
 

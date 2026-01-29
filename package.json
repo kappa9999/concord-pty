@@ -1,9 +1,9 @@
 {
-  "name": "concord-pty",
+  "name": "criticloop",
   "version": "0.1.0",
   "description": "PTY-based two-agent orchestrator for CLI models",
   "bin": {
-    "concord-pty": "./bin/concord-pty.js"
+    "criticloop": "./bin/criticloop.js"
   },
   "type": "commonjs",
   "engines": {

@@ -14,7 +14,7 @@ class Tui {
 
   start(agentAName, agentBName) {
     if (!this.enabled) return;
-    this.screen = blessed.screen({ smartCSR: true, title: 'Concord-PTY' });
+    this.screen = blessed.screen({ smartCSR: true, title: 'CriticLoop' });
 
     this.boxA = blessed.box({
       top: 0,
@@ -88,3 +88,4 @@ class Tui {
 }
 
 module.exports = Tui;
+

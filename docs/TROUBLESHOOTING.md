@@ -7,7 +7,7 @@
  - Interactive setup requires a real TTY (not piped stdin).
 
 ## Responses cut off early
-- Increase `timeoutMs` or `idleMs` in `concord.config.json`.
+- Increase `timeoutMs` or `idleMs` in `criticloop.config.json`.
 - Some CLIs buffer output; try a larger `idleMs` (e.g. 3000).
 
 ## Sentinel not detected
@@ -20,7 +20,7 @@
 
 ## Windows-specific PTY issues
 - `node-pty` uses ConPTY. If you see broken characters, try a different terminal font.
-- If the CLI uses ANSI-less output, it still works; Concord-PTY strips ANSI codes.
+- If the CLI uses ANSI-less output, it still works; CriticLoop strips ANSI codes.
 
 ## Logs are empty
 - Check `sessions/<timestamp>/agentA.log` and `agentB.log` for raw PTY output.
@@ -28,4 +28,5 @@
 
 ## Still stuck?
 - Share the `summary.json` and the raw logs for both agents.
+
 
