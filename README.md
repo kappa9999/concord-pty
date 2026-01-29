@@ -1,39 +1,85 @@
 # Concord-PTY
 
-PTY-based two-agent orchestrator for CLI models. It launches two agent CLIs, assigns roles, and loops their feedback until both agree on a shared plan.
+<p align="center">
+  <b>Two-agent PTY orchestrator for CLI models.</b><br>
+  Let a Designer and a Critic debate until they agree.
+</p>
 
-## Features
-- Works with any CLI model by spawning it inside a PTY
-- Role-based prompts with a simple agreement protocol
-- Split-screen TUI (two live panes plus status)
-- Plain mode with logs for external tailing
-- Session transcripts and raw logs per agent
+<p align="center">
+  <a href="https://github.com/kappa9999/concord-pty">GitHub</a> ?
+  <a href="docs/GETTING_STARTED.md">Getting Started</a> ?
+  <a href="docs/TROUBLESHOOTING.md">Troubleshooting</a>
+</p>
 
-## Quick start
-1) Install dependencies
+<p align="center">
+  <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-111111" />
+  <img src="https://img.shields.io/badge/PTY-node--pty-111111" />
+  <img src="https://img.shields.io/badge/interface-TUI-111111" />
+</p>
 
+## What it does
+Concord-PTY runs two CLI agents in separate PTYs, assigns them roles, and loops their feedback until both agree on a shared proposal.
+
+**Perfect for:**
+- Designer vs Reviewer (same model, different roles)
+- Planner vs Critic (two different CLIs)
+- Researcher vs Skeptic (deep review loops)
+
+## Quick demo (TUI)
+```
+????????????? Designer ?????????????????????????? Reviewer ?????????????
+? AGREE: no                         ?? AGREE: no                         ?
+? PROPOSAL:                          ?? PROPOSAL:                          ?
+? 1) Draft API surface               ?? 1) Reduce scope                    ?
+? 2) Add tests                        ?? 2) Add edge cases                  ?
+? NOTES:                              ?? NOTES:                             ?
+? - Missing error paths              ?? - Consider timeouts                ?
+??????????????????????????????????????????????????????????????????????????
+????????????????????????? Status ?????????????????????????
+? Round 2 - awaiting Alpha review                          ?
+???????????????????????????????????????????????????????????
+```
+
+## Why Concord-PTY
+- **Model-agnostic:** Works with any CLI model, including open-source tools.
+- **Role-driven:** Enforce ?Designer vs Critic? behavior with a strict protocol.
+- **Deterministic stopping:** Sentinel + idle detection keeps outputs clean.
+- **Traceable:** Full transcripts + raw logs per agent.
+
+## Install
 ```bash
 npm install
 ```
 
-2) Create a config
-
+## Start in 3 steps
 ```bash
 node ./bin/concord-pty.js init
 ```
 
-3) Edit `concord.config.json` with your two agent commands and roles
-
-4) Run a session
+Edit `concord.config.json`, then:
 
 ```bash
 node ./bin/concord-pty.js --task "Design a minimal API and test plan"
 ```
 
-For a step-by-step guide, see `docs/GETTING_STARTED.md`.
+## Templates
+- Same model, different roles: `examples/concord.config.same-model.json`
+- Two different CLIs: `examples/concord.config.two-clis.json`
+
+## How it works
+```mermaid
+sequenceDiagram
+  participant A as Agent A (Designer)
+  participant B as Agent B (Reviewer)
+  A->>B: Proposal
+  B->>A: Review (agree or revise)
+  A->>B: Review (agree or revise)
+  loop until both agree
+    B-->>A: Agreement check
+  end
+```
 
 ## CLI usage
-
 ```bash
 node ./bin/concord-pty.js [options]
 
@@ -106,10 +152,6 @@ You can run the same CLI/model in both slots with different roles. Example:
 }
 ```
 
-There is also a ready-made template at `examples/concord.config.same-model.json`.
-
-For two different CLIs, use `examples/concord.config.two-clis.json`.
-
 ## Protocol
 Concord-PTY sends a short bootstrap message that tells each agent to:
 - Always answer with:
@@ -136,8 +178,12 @@ tail -f sessions/<timestamp>/agentA.log
 Get-Content -Wait sessions/<timestamp>/agentB.log
 ```
 
+## Docs
+- `docs/GETTING_STARTED.md`
+- `docs/TROUBLESHOOTING.md`
+- `docs/PROTOCOL.md`
+
 ## Notes
 - Some CLIs display prompts or extra text; the sentinel helps delimit responses.
 - If you see premature cutoffs, increase `timeoutMs` or `idleMs` in config.
-- For common issues, see `docs/TROUBLESHOOTING.md`.
 
