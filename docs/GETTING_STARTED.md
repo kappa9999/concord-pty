@@ -8,13 +8,13 @@ This guide shows how to run two CLI agents in separate PTYs and have them iterat
 npm install
 ```
 
-## 2) Create a config
+## 2) Setup wizard (no manual edits)
 
 ```bash
-node ./bin/concord-pty.js init
+node ./bin/concord-pty.js setup
 ```
 
-This writes `concord.config.json`. Edit it to point at your two CLI commands.
+This writes `concord.config.json` if you choose to save, or runs from in-memory settings.
 
 ## 3) Run a task
 
@@ -22,7 +22,13 @@ This writes `concord.config.json`. Edit it to point at your two CLI commands.
 node ./bin/concord-pty.js --task "Design a minimal API and test plan"
 ```
 
-## 4) Using the same model twice
+## 4) Interactive roles (no config edits)
+
+```bash
+node ./bin/concord-pty.js --interactive --task "Create a UI spec and review it"
+```
+
+## 5) Using the same model twice
 
 Copy the template and edit the command to your CLI:
 
@@ -34,7 +40,7 @@ copy examples\concord.config.same-model.json concord.config.json
 node ./bin/concord-pty.js --task "Create a UI spec and review it"
 ```
 
-## 5) Using two different CLIs
+## 6) Using two different CLIs
 
 Copy the template and edit both commands:
 
@@ -46,7 +52,7 @@ copy examples\concord.config.two-clis.json concord.config.json
 node ./bin/concord-pty.js --task "Draft a plan and critique it"
 ```
 
-## 6) Logs
+## 7) Logs
 
 Each run creates `sessions/<timestamp>/` with:
 - `agentA.log`

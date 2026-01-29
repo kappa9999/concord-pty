@@ -11,7 +11,7 @@ function resolveConfigPath(inputPath) {
 function loadConfig(inputPath) {
   const resolved = resolveConfigPath(inputPath);
   if (!resolved || !fs.existsSync(resolved)) {
-    throw new Error('Config not found. Run: node ./bin/concord-pty.js init');
+    throw new Error('Config not found. Run: node ./bin/concord-pty.js init or node ./bin/concord-pty.js setup');
   }
   const raw = fs.readFileSync(resolved, 'utf8');
   const cfg = JSON.parse(raw);

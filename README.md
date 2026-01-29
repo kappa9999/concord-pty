@@ -1,13 +1,17 @@
 # Concord-PTY
 
 <p align="center">
+  <img src="assets/logo.svg" width="160" alt="Concord-PTY logo" />
+</p>
+
+<p align="center">
   <b>Two-agent PTY orchestrator for CLI models.</b><br>
   Let a Designer and a Critic debate until they agree.
 </p>
 
 <p align="center">
-  <a href="https://github.com/kappa9999/concord-pty">GitHub</a> ?
-  <a href="docs/GETTING_STARTED.md">Getting Started</a> ?
+  <a href="https://github.com/kappa9999/concord-pty">GitHub</a> |
+  <a href="docs/GETTING_STARTED.md">Getting Started</a> |
   <a href="docs/TROUBLESHOOTING.md">Troubleshooting</a>
 </p>
 
@@ -20,46 +24,53 @@
 ## What it does
 Concord-PTY runs two CLI agents in separate PTYs, assigns them roles, and loops their feedback until both agree on a shared proposal.
 
-**Perfect for:**
+Perfect for:
 - Designer vs Reviewer (same model, different roles)
 - Planner vs Critic (two different CLIs)
 - Researcher vs Skeptic (deep review loops)
 
 ## Quick demo (TUI)
 ```
-????????????? Designer ?????????????????????????? Reviewer ?????????????
-? AGREE: no                         ?? AGREE: no                         ?
-? PROPOSAL:                          ?? PROPOSAL:                          ?
-? 1) Draft API surface               ?? 1) Reduce scope                    ?
-? 2) Add tests                        ?? 2) Add edge cases                  ?
-? NOTES:                              ?? NOTES:                             ?
-? - Missing error paths              ?? - Consider timeouts                ?
-??????????????????????????????????????????????????????????????????????????
-????????????????????????? Status ?????????????????????????
-? Round 2 - awaiting Alpha review                          ?
-???????????????????????????????????????????????????????????
++-------------------- Designer --------------------+ +-------------------- Reviewer --------------------+
+| AGREE: no                                         | | AGREE: no                                         |
+| PROPOSAL:                                         | | PROPOSAL:                                         |
+| 1) Draft API surface                              | | 1) Reduce scope                                   |
+| 2) Add tests                                      | | 2) Add edge cases                                 |
+| NOTES:                                            | | NOTES:                                            |
+| - Missing error paths                             | | - Consider timeouts                               |
++---------------------------------------------------+ +---------------------------------------------------+
++------------------------- Status -------------------------+
+| Round 2 - awaiting Alpha review                           |
++-----------------------------------------------------------+
 ```
 
 ## Why Concord-PTY
-- **Model-agnostic:** Works with any CLI model, including open-source tools.
-- **Role-driven:** Enforce ?Designer vs Critic? behavior with a strict protocol.
-- **Deterministic stopping:** Sentinel + idle detection keeps outputs clean.
-- **Traceable:** Full transcripts + raw logs per agent.
+- Model-agnostic: Works with any CLI model, including open-source tools.
+- Role-driven: Enforce Designer vs Critic behavior with a strict protocol.
+- Deterministic stopping: Sentinel + idle detection keeps outputs clean.
+- Traceable: Full transcripts + raw logs per agent.
 
 ## Install
 ```bash
 npm install
 ```
 
-## Start in 3 steps
+## Start fast (no manual edits)
 ```bash
-node ./bin/concord-pty.js init
+node ./bin/concord-pty.js setup
 ```
 
-Edit `concord.config.json`, then:
+Then run a task:
 
 ```bash
 node ./bin/concord-pty.js --task "Design a minimal API and test plan"
+```
+
+## No-edit interactive mode
+Use `--interactive` to input roles (and optionally names/commands) at runtime:
+
+```bash
+node ./bin/concord-pty.js --interactive --task "Draft a plan and review it"
 ```
 
 ## Templates
@@ -83,16 +94,44 @@ sequenceDiagram
 ```bash
 node ./bin/concord-pty.js [options]
 
+Commands:
+  init    Write a template config
+  setup   Interactive wizard (recommended)
+
 Options:
   -c, --config <path>     Config path (default: concord.config.json)
   -t, --task <text>       Task text
   --task-file <path>      Read task from file
   --no-tui                Disable split TUI
+  --interactive           Prompt for roles/names/commands at runtime
+  --save-config           Save config when using setup/interactive
+  --print-config          Print resolved config and exit
+  --session-name <name>   Label session log folder
+  --name <text>           Name for both agents
+  --name-a <text>         Name for agent A
+  --name-b <text>         Name for agent B
+  --role <text>           Role for both agents
+  --role-a <text>         Role for agent A
+  --role-b <text>         Role for agent B
+  --command <text>        Command for both agents
+  --command-a <text>      Command for agent A
+  --command-b <text>      Command for agent B
+  --cmd-a <text>          Executable for agent A (use with --args-a)
+  --args-a <text>         Args for agent A (quoted string)
+  --cmd-b <text>          Executable for agent B (use with --args-b)
+  --args-b <text>         Args for agent B (quoted string)
   --max-rounds <n>        Override max rounds
   --timeout-ms <n>        Override message hard timeout
   --idle-ms <n>           Override idle timeout
   --sentinel <string>     Override end-of-message sentinel
 ```
+
+## Environment variables
+- `CONCORD_TASK`
+- `CONCORD_AGENT_A_NAME`, `CONCORD_AGENT_B_NAME`
+- `CONCORD_AGENT_A_ROLE`, `CONCORD_AGENT_B_ROLE`
+- `CONCORD_AGENT_A_COMMAND`, `CONCORD_AGENT_B_COMMAND`
+- `CONCORD_SESSION_NAME`
 
 ## Config
 The `init` command writes `concord.config.json`. Example:
@@ -123,34 +162,6 @@ The `init` command writes `concord.config.json`. Example:
 ```
 
 You can also use `cmd` + `args` instead of `command` if you prefer exact argument splitting.
-
-## Using the same model twice
-You can run the same CLI/model in both slots with different roles. Example:
-
-```json
-{
-  "session": {
-    "maxRounds": 6,
-    "timeoutMs": 120000,
-    "idleMs": 1500
-  },
-  "tui": {
-    "enabled": true
-  },
-  "agents": {
-    "alpha": {
-      "name": "Designer",
-      "role": "Designer",
-      "command": "codex --model gpt-5.2 --interactive"
-    },
-    "beta": {
-      "name": "Reviewer",
-      "role": "Reviewer/Critic",
-      "command": "codex --model gpt-5.2 --interactive"
-    }
-  }
-}
-```
 
 ## Protocol
 Concord-PTY sends a short bootstrap message that tells each agent to:

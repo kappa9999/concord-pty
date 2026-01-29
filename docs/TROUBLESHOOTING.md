@@ -4,6 +4,7 @@
 - Verify the command runs standalone in your terminal.
 - If the CLI needs a shell, use `command` instead of `cmd` + `args`.
 - On Windows, confirm your CLI is in `PATH`.
+ - Interactive setup requires a real TTY (not piped stdin).
 
 ## Responses cut off early
 - Increase `timeoutMs` or `idleMs` in `concord.config.json`.

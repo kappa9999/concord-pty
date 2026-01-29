@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const PtyAgent = require('./pty-agent');
-const { normalizeProposal, hashText, nowIso, sleep } = require('./utils');
+const { normalizeProposal, hashText, nowIso, sleep, sanitizeName } = require('./utils');
 
 function generateSentinel() {
   const id = crypto.randomBytes(4).toString('hex');
@@ -89,7 +89,9 @@ class Orchestrator {
 
   _initLogs() {
     const ts = nowIso().replace(/[:.]/g, '-');
-    const dir = path.resolve(process.cwd(), 'sessions', ts);
+    const label = this.config.session && this.config.session.name ? sanitizeName(this.config.session.name) : '';
+    const dirName = label ? `${ts}_${label}` : ts;
+    const dir = path.resolve(process.cwd(), 'sessions', dirName);
     fs.mkdirSync(dir, { recursive: true });
     this.sessionDir = dir;
     this.transcriptStream = fs.createWriteStream(path.join(dir, 'transcript.jsonl'), { flags: 'a' });

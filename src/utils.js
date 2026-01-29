@@ -22,10 +22,21 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function sanitizeName(input) {
+  if (!input) return '';
+  const clean = String(input)
+    .trim()
+    .replace(/[^\w.-]+/g, '_')
+    .replace(/_{2,}/g, '_')
+    .replace(/^_+|_+$/g, '');
+  return clean.slice(0, 48);
+}
+
 module.exports = {
   stripAnsi,
   normalizeProposal,
   hashText,
   nowIso,
-  sleep
+  sleep,
+  sanitizeName
 };
